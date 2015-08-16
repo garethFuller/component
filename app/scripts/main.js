@@ -1,3 +1,4 @@
 import listComponent from './list-component';
 
-alert('we are in');
+// run the list component
+listComponent();

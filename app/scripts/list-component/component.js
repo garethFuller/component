@@ -5,7 +5,7 @@ export default function() {
       console.log('the item was created');
     }
 
-    attchaedCallback() {
+    attachedCallback() {
       console.log('the item was attached');
     }
 
@@ -13,11 +13,11 @@ export default function() {
       console.log('the item was detached');
     }
 
-    attributeChanged(attr, oldVal, newVal) {
+    attributeChangedCallback(attr, oldVal, newVal) {
       console.log('attr changed', attr, oldVal, newVal);
     }
   }
 
+  // register the new list component
   document.registerElement('list-component', ListComponent);
-
 }

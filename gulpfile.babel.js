@@ -4,6 +4,11 @@ import gulpLoadPlugins from 'gulp-load-plugins';
 import browserSync from 'browser-sync';
 import del from 'del';
 import {stream as wiredep} from 'wiredep';
+import browserify from 'browserify';
+import babel from 'babelify';
+import watchify from 'watchify';
+import source from 'vinyl-source-stream';
+import runSequence from 'run-sequence';
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
@@ -23,19 +28,15 @@ gulp.task('styles', () => {
     .pipe(reload({stream: true}));
 });
 
-gulp.task('watchjs', () => {
-
-  var bundler = $.watchify($.browserify('app/scripts/**/*.js', {debug: true}).transform($.bable()));
-
-  // bundler.bundle()
-  //   .on('error')
-  //
-  // return gulp.src('app/scripts/**/*.js')
-  //   .pipe($.sourcemaps.init())
-  //   .pipe($.babel())
-  //   .pipe($.concat('main.js'))
-  //   .pipe($.sourcemaps.write('.'))
-  //   .pipe(gulp.dest('dist/scripts'));
+gulp.task('compilejs', () => {
+  return browserify('app/scripts/main.js')
+  .transform(babel)
+  .bundle()
+  .on('error', (err) => {
+    console.log('Errror: ' + err.message);
+  })
+  .pipe(source('main.js'))
+  .pipe(gulp.dest('dist/scripts/'));
 });
 
 function lint(files, options) {
@@ -66,7 +67,17 @@ gulp.task('clean', () => {
   return del(['dist']);
 });
 
-gulp.task('serve', ['clean', 'styles', 'watchjs', 'html'], () => {
+gulp.task('dev', (done) => {
+  runSequence(
+    ['clean'],
+    ['styles', 'compilejs'],
+    ['html'],
+    ['serve', 'watch'],
+    done
+  );
+});
+
+gulp.task('serve', () => {
   browserSync({
     notify: false,
     port: 9000,
@@ -77,11 +88,16 @@ gulp.task('serve', ['clean', 'styles', 'watchjs', 'html'], () => {
       }
     }
   });
+});
 
+gulp.task('watch', () => {
+  gulp.watch('app/scripts/**/*.js', ['compilejs', 'reload']);
   gulp.watch('app/*.html', ['html', 'reload']);
   gulp.watch('app/styles/**/*.scss', ['styles', 'reload']);
   gulp.watch('bower.json', ['wiredep', 'fonts']);
 });
+
+gulp.task('reload', reload);
 
 
 gulp.task('serve:test', () => {
