@@ -1,0 +1,20 @@
+<!-- <template id="list-component"> -->
+  <!-- Custom tag so we can use the JS hooks -->
+  <list-component>
+    <!-- The styles etc on this nested component should be isolated in shadow dom -->
+    <ul>
+      <li>Item one</li>
+      <li>Item two</li>
+      <li>
+        <p>Item three, in a p</p>
+      </li>
+    </ul>
+  </list-component>
+
+  <!-- JS for the list component (compiled from inner gulp file) -->
+  <script src="../build/index.js" />
+
+  <!-- Styles for the list component -->
+  <link rel="stylesheet" href="../build/main.css">
+
+<!--</template>-->

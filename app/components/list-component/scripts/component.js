@@ -1,5 +1,5 @@
 export default function() {
-  // create the component using E26 class :D
+  // create the component using ES6 class :D
   class ListComponent extends HTMLElement {
     createdCallback() {
       console.log('the item was created');

@@ -1,4 +1,5 @@
-import listComponent from './list-component';
+console.log('greets from the main JS file');
 
-// run the list component
-listComponent();
+// var template = document.getElementById('list-component');
+// var clone = template.content.cloneNode(true);
+// document.body.appendChild(clone);
